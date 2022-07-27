@@ -1,0 +1,134 @@
+Understanding Programs:
+https://docs.metaplex.com/programs/understanding-programs 
+
+Architecture:
+https://docs.metaplex.com/architecture/contracts 
+
+
+minting type: (Token Metadata)
+    1: Normal mints that just have names (Metadata but no MasterEdition)
+    2: One of a kind NFTs (Metadata + MasterEdition with max_supply of 0)
+    3: NFTs that can print limited edition child NFTs (Metadata + MasterEdition with max_supply of say 10)
+    4: NFTs that can print unlimited open edition NFTs (Metadata + MasterEdition with unlimited max_supply)
+
+
+Token Vault: (like stacking)
+    You can create a vault object, and insert any number of tokens from any number of mints into safety deposit boxes
+    It has a few different states:
+        1: Activated - in this state vault been locked and nobody can access its contents
+        2: Combined - in this state vault been opened andthe vault authority can withdraw the contents
+
+
+Auction:
+    It knows nothing about NFTs, or Metadata, or anything else in the Metaplex ecosystem
+    It cares about is that it has a resource address and it use auction mechanics to auction off that resource
+    It currently supports English Auctions and Open Edition Auctions (no winners but bids are tracked)
+    Its only purpose is to track who won what place in an auction and to collect money for those wins
+    After complete the bid prizes are delivered if prizes are won 
+        or may be it's sign a PDA to the winner for saying that they received the prize 
+
+
+
+Metaplex:
+    This is the granddaddy contract of them all
+    The primary product of the Metaplex contract are AuctionManagers
+    The purpose of an AuctionManager is to understand that an Auction object is auctioning off the contents of a Vault
+
+    The contents of a Vault are different types of NFT arrangements, such as:
+        1: Limited Edition Prints (Printing a new child edition from limited supply)
+        2: Open Edition Prints (Printing a new child edition from unlimited supply)
+        3: Full Rights Transfers (Giving away token + metadata ownership)
+        4: Single Token Transfers (Giving away a token but not metadata ownership)
+
+    An AuctionManager requires both a Vault and an Auction to run, 
+        and it requires that the Auction's resource key be set to the Vault
+
+
+
+
+Minting an NFT:
+    https://docs.metaplex.com/architecture/basic_flow 
+    On the Solana network an NFT is represented as a Token with only 1 in circulation and further minting is disabled
+    but that's not very useful
+    A token contains very little data about itself
+    In fact it doesn't even know its own name
+    Solana tokens are a primitive construct that we build on top of
+    Metaplex is the standard way to add metadata to tokens
+
+    In order to create an NFT using metaplex we will follow these steps:
+        1: Optional: Pay for the Upload
+        2: Creating a Token Mint
+        3: Optional: Creating A Token Associated Account (special type of account that allows you to receive a token or tokens made by a mint)
+        4: Creating A Token Metadata Account
+        5: Upload the Files
+        6: Mint one Token
+        7 : Create Master Edition
+
+    We are breaking these steps down to make it easier to follow:
+        Steps 1-4 happen as one Transaction on the Solana network
+        Steps 6-7 are also just one transaction
+
+
+
+The Auction steps:
+    1: The Mint address - this is the public key of the account we made to store the mint.
+    2: The destination address - this is that PDA(Program Derived Address) that we used to store the Token MetaData, 
+        and it is now the address or public key of the Token Metadata Account.
+    3: Your public key - since you are the Minting Authority or Owner of the mint, you have the ability to mint.
+    4: An amount, in this case 1
+
+
+    5: Next, we create a token vault using the init_vault endpoint of the token vault contract.
+        We'll store our master edition token in it by adding it to the vault using the add_token_to_inactive_vault endpoint.
+        This will create a safety deposit box in the vault that contains the the token.
+
+    6: Then we will call the activate_vault command which Activates the vault, locking everything inside.
+
+    7: We now Combine the vault using combine_vault
+        which is to say, we "open it," so the current authority could, if they wanted, withdraw the tokens inside it. 
+        The Auction Manager can only work with vaults in this state, which is why 
+        we have to go through the Activation phase to get here even though it seems a little nonsensical. 
+
+    8: we create the auction, and we say its resource is this vault.
+        The auction has not yet been started, but it has the right resource (the vault). 
+        We do this via the create_auction command on the Auction contract.
+
+    9: Now that we have an auction and a vault.
+        we can go and call the init_auction_manager endpoint on the Metaplex contract 
+        with both of these accounts among a few others to create an AuctionManager, which ties them both together. 
+
+    10: Before we begin validation, we call set_authority on both the vault 
+        and auction to change its authority to the auction manager, so that it has control over both of those structs. 
+        This is a requirement for the validation phase and the rest of the contract lifecycle. 
+        Now you no longer have control over your items.
+
+    11: We call the validate_safety_deposit_box endpoint on the Metaplex contract with the one safety deposit box in the vault
+        and the logic in this endpoint checks that there are exactly 3 printing tokens from the right mint in this box
+        matching the 3 printing tokens we promised it would have in our AuctionManagerSettings.
+        Once we do this, and because this is the only safety deposit box in the vault, the AuctionManager is now validated.
+
+    12: We now call start_auction on the Metaplex contract
+        which, because the AuctionManager has authority over the Auction,
+        calls start_auction on the Auction contract, and the auction begins
+
+    13: Users can go and call place_bid on the Auction contract to place bids. 
+        When they do this, tokens of the token_mint type used by the auction are taken from the account they provide
+        tied to their main wallet, and stored in bidder pot accounts in the auction contract.
+
+    14: In order to update a bid, a user must first cancel the original bid, and then place a new bid.
+        
+    15: Once the auction is over, a user can refund their bid if they did not win by calling cancel_bid again.
+        Winners of the auction cannot cancel their bids.
+
+    16: The winner of a bid creates a mint with decimals 0, a token account with 1 token in it
+        and calls the redeem_printing_v2_bid endpoint on the Metaplex contract
+        all in a single transaction. This token is now officially a Limited Edition of the "Bob's Cool NFT" Master Edition NFT
+
+    17: You, the auctioneer, visit /#/auction/id/billing and hit the settle button. 
+        This first iterates over all three bidders and for each wallet used, calls claim_bid on the Metaplex contract
+        which proxy-calls a claim_bid on the Auction contract, 
+        telling it to dump the winner's payment into an escrow account called accept_payment on the AuctionManager struct.
+        It has the same token type as the auction. Once all payments have been collected
+        the front end then calls the empty_payment_account endpoint one time (since you are the only creator on the Metadata being sold)
+        and the funds in this escrow are paid out to a token account provided of the same type owned by you.
+

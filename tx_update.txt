@@ -1,0 +1,86 @@
+=====> setNft_update: updatedNft:  Nft {
+  metadataAccount: {
+    publicKey: Pda {
+      _bn: <BN: 2b1bb39eeefdfb9461c3ca08855ba8ff5ed5949af7d8f2b6a9f3d57abeffef9d>,
+      bump: 255
+    },
+    exists: true,
+    data: Metadata {
+      key: 4,
+      updateAuthority: [PublicKey],
+      mint: [PublicKey],
+      data: [Object],
+      primarySaleHappened: false,
+      isMutable: true,
+      editionNonce: 255,
+      tokenStandard: 0,
+      collection: null,
+      uses: null,
+      collectionDetails: null
+    },
+    executable: false,
+    lamports: 5616720,
+    owner: PublicKey {
+      _bn: <BN: b7065b1e3d17c45389d527f6b04c3cd58b86c731aa0fdb549b6d1bc03f82946>
+    },
+    rentEpoch: 331
+  },
+  metadataTask: Task {
+    status: 'successful',
+    result: {
+      name: 'Name of 2',
+      symbol: 'My-NFT',
+      description: 'Collection of - numbers on the blockchain. This is the number -/-.',
+      seller_fee_basis_points: 500,
+      image: 'https://www.arweave.net/yqe2osWzKBN4BFRvXkZ-3zTdHOgQ1yz2ZnBA7Rz9tK0?ext=png',
+      attributes: [Array],
+      properties: [Object],
+      collection: [Object]
+    },
+    error: undefined,
+    callback: [Function (anonymous)],
+    children: [],
+    context: {},
+    eventEmitter: EventEmitter {
+      _events: Events <Complex prototype> {},
+      _eventsCount: 0
+    }
+  },
+  editionTask: Task {
+    status: 'successful',
+    result: {
+      publicKey: [Pda],
+      exists: true,
+      data: [MasterEditionV2],
+      executable: false,
+      lamports: 2853600,
+      owner: [PublicKey],
+      rentEpoch: 331
+    },
+    error: undefined,
+    callback: [AsyncFunction (anonymous)],
+    children: [],
+    context: {},
+    eventEmitter: EventEmitter {
+      _events: Events <Complex prototype> {},
+      _eventsCount: 0
+    }
+  },
+  updateAuthority: PublicKey {
+    _bn: <BN: cf47fdf027de11f92d6f5d4ee993db5c777ba88b81fce259b088a01cb726134>
+  },
+  mint: PublicKey {
+    _bn: <BN: aad8ae23a42b5e1bd9dda1b477ec7eefce7839ef89a00330972caaca0acc143f>
+  },
+  name: 'My NFT Name Changed',
+  symbol: 'My-NFT',
+  uri: 'https://ls3cbsrrce2el32w4uwf2kri3c6rbuxi4x2rsl4dzhveomkvo4.arweave.net/XLYgyjERNEXvVuUsXSoo2L0Q0ujl9Rkvg8_nqRzFVd8/',
+  sellerFeeBasisPoints: 0,
+  creators: [ { address: [PublicKey], verified: true, share: 100 } ],
+  primarySaleHappened: false,
+  isMutable: true,
+  editionNonce: 255,
+  tokenStandard: 0,
+  collection: null,
+  uses: null
+} 

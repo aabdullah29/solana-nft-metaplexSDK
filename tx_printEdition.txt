@@ -1,0 +1,81 @@
+=====> setNft_printNewEdition:  Nft {
+  metadataAccount: {
+    publicKey: Pda {
+      _bn: <BN: 302713e489bfe4d46b5bddbb89811e48e68f3cff5e032d704473bcc09558803f>,
+      bump: 254
+    },
+    exists: true,
+    data: Metadata {
+      key: 4,
+      updateAuthority: [PublicKey],
+      mint: [PublicKey],
+      data: [Object],
+      primarySaleHappened: false,
+      isMutable: false,
+      editionNonce: 255,
+      tokenStandard: 3,
+      collection: null,
+      uses: null,
+      collectionDetails: null
+    },
+    executable: false,
+    lamports: 5616720,
+    owner: PublicKey {
+      _bn: <BN: b7065b1e3d17c45389d527f6b04c3cd58b86c731aa0fdb549b6d1bc03f82946>
+    },
+    rentEpoch: 333
+  },
+  metadataTask: Task {
+    status: 'successful',
+    result: {
+      name: 'NFT jun 28 4:20',
+      description: 'My description of the metaplex nfts file',
+      image: 'https://img.freepik.com/free-vector/nft-non-fungible-token-non-fungible-tokens-icon-covering-concept-nft-high-tech-technology-symbol-logo-vector_208588-2005.jpg?w=2000'
+    },
+    error: undefined,
+    callback: [Function (anonymous)],
+    children: [],
+    context: {},
+    eventEmitter: EventEmitter {
+      _events: Events <Complex prototype> {},
+      _eventsCount: 0
+    }
+  },
+  editionTask: Task {
+    status: 'successful',
+    result: {
+      publicKey: [Pda],
+      exists: true,
+      data: [Edition],
+      executable: false,
+      lamports: 2568240,
+      owner: [PublicKey],
+      rentEpoch: 333
+    },
+    error: undefined,
+    callback: [AsyncFunction (anonymous)],
+    children: [],
+    context: {},
+    eventEmitter: EventEmitter {
+      _events: Events <Complex prototype> {},
+      _eventsCount: 0
+    }
+  },
+  updateAuthority: PublicKey {
+    _bn: <BN: cf47fdf027de11f92d6f5d4ee993db5c777ba88b81fce259b088a01cb726134>
+  },
+  mint: PublicKey {
+    _bn: <BN: 407b2b30166e0d7328cad6f6e0d0e9a2a0b565c087e61af51a21e35346aa8f5a>
+  },
+  name: 'NFT jun 28 4:20',
+  symbol: '',
+  uri: 'https://arweave.net/cH0o_QXnUBgyVW4XHNVjG24QVbOfNRgtoHVmS__y8fA',
+  sellerFeeBasisPoints: 500,
+  creators: [ { address: [PublicKey], verified: true, share: 100 } ],
+  primarySaleHappened: false,
+  isMutable: false,
+  editionNonce: 255,
+  tokenStandard: 3,
+  collection: null,
+  uses: null
+} 
