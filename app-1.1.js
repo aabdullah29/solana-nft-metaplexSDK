@@ -15,7 +15,7 @@ const writeFile = async (fName, fContent) => {
     });
 }
 
-const wallet_file = await readFile('./wallet-nft.json');
+const wallet_file = await readFile('./wallet/wallet-nft.json');
 const wallet = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(wallet_file)));
 console.log('=====> wallet PublicKey:', wallet.publicKey.toBase58())
 
@@ -46,7 +46,7 @@ const uploadMetadata = async(metaplex, img) => {
 
 
 async function main(){
-    const inputData = await JSON.parse( await readFile('./input.json'));
+    const inputData = await JSON.parse( await readFile('./files/input.json'));
 
     for (let i in inputData){
         // const link = `https://${i}.com`;
@@ -58,12 +58,12 @@ async function main(){
                 maxSupply: 0,
                 // sellerFeeBasisPoints: 1500,
             });
-            writeFile('result-success.txt', `${i}: ${link},\n`);
-            writeFile('result-nft-details.json', `"${i}": ${JSON.stringify(nft)},\n\n`);
+            writeFile('./files/result-success.txt', `${i}: ${link},\n`);
+            writeFile('./files/result-nft-details.json', `"${i}": ${JSON.stringify(nft)},\n\n`);
             console.log(i, ': success.')
         } catch(e){
-            writeFile('result-fail.txt', `${i},`);
-            writeFile('result-error.txt', `${i}: ${e} \n\n`);
+            writeFile('./files/result-fail.txt', `${i},`);
+            writeFile('./files/result-error.txt', `${i}: ${e} \n\n`);
             console.log(i, ': fail.')
         }
     }    

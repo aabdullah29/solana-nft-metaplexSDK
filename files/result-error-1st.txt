@@ -1,0 +1,14 @@
+1: FetchError: request to https://api.devnet.solana.com/ failed, reason: connect ETIMEDOUT 139.178.65.155:443 
+
+0: [MetaplexError] Failed to Confirm Transaction
+>> Source: RPC
+>> Problem: The transaction could not be confirmed.
+>> Solution: Check the error below for more information.
+
+Caused By: TransactionExpiredTimeoutError: Transaction was not confirmed in 60.00 seconds. It is unknown if it succeeded or failed. Check signature 4NJhNE9jXv6ceE9xEsuWNp9JHTMK7TT3BVpaJKp6CKvtSSomK88w1MYk1gSkrNmHBFyYRZKgVXmgxd6vGCks1EE3 using the Solana Explorer or CLI tools.
+ 
+
+2: FetchError: request to https://api.devnet.solana.com/ failed, reason: connect ETIMEDOUT 139.178.65.155:443 
+
+0: FetchError: request to https://api.devnet.solana.com/ failed, reason: connect ETIMEDOUT 139.178.65.155:443 
+

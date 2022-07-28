@@ -16,7 +16,7 @@ const readFile = async (input) => {
 // import { readFile } from 'fs/promises';
 // const json = JSON.parse(await readFile(new URL('./wallet.json', import.meta.url)));
 
-const wallet_file = await readFile('./wallet.json');
+const wallet_file = await readFile('./wallet/wallet.json');
 const wallet = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(wallet_file)));
 // console.log('=====> wallet:', wallet)
 
